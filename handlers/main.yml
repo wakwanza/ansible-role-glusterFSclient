@@ -1,0 +1,10 @@
+---
+- name: restart rpcbind
+  command: service rpcbind restart enabled=yes
+
+- name: restart glusterd
+  command: service glusterd restart enabled=yes
+
+- name: reload fstab
+  command: mount -a
+  

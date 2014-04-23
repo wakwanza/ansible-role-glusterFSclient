@@ -1,0 +1,14 @@
+---
+- name: Create the mount point on the server
+  action: file path={{ data_dir_path }} state=directory
+
+- name: Make the location for fstab to pick DFS config file
+  action: file path=/etc/glusterfs state=directory owner=root group=root
+
+- name: Copy the RDS volume file over
+  template: src=files/RDS.vol dest=/etc/glusterfs owner=root group=users
+
+- name: Modify fstab to add the RDS vol file
+  lineinfile: dest=/etc/fstab regexp='' insertafter=EOF line='"/etc/glusterfs/RDS.vol {{ data_dir_path }} glusterfs rw,allow_other,default_permissions,max_read=131072 0 0"'
+  notify:
+   - reload fstab
